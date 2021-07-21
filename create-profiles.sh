@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -u -e
+#!/usr/bin/env bash
+set -u
+set -e
 
 which python3 1>/dev/null
 
@@ -43,10 +45,12 @@ NAMING_SCRIPT_FILE="${SCRIPT_HOME}/naming-script.sh"
 function make_naming_script {
   cd ${SCRIPT_HOME}
   dir=$(pwd)
-  echo '#!/usr/bin/env bash -u -e
-acc="${1,,}"
+  echo '#!/usr/bin/env bash
+set -u
+set -e
+acc="$(echo $1| tr "[:upper:]" "[:lower:]")"
 acc="${acc/#digitalroute-/}"
-rol="${3,,}"
+rol="$(echo $3| tr "[:upper:]" "[:lower:]")"
 rol="${rol/#developer/dev}"
 rol="${rol/#administrator/admin}"
 rol="${rol/#implementation/impl}"
