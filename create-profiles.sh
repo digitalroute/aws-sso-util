@@ -2,7 +2,39 @@
 set -u
 set -e
 
-which python3 1>/dev/null
+PYTHON3_INSTALLED=0
+which python3 > /dev/null 2>&1 || PYTHON3_INSTALLED=1
+if [ ${PYTHON3_INSTALLED} -ne 0 ]; then
+  cat << EOF  >&2
+
+ERROR: python3 is not installed, this script requires python version 3
+available on the PATH as 'python3'. Fix this by installing python3, using
+the appropriate tools for your Operating System.
+
+EOF
+  exit 1
+fi
+
+VENV_INSTALLED=0
+python3 -c 'import venv' > /dev/null 2>&1 || VENV_INSTALLED=1
+
+if [ ${VENV_INSTALLED} -ne 0 ]; then
+  cat << EOF  >&2
+
+ERROR: The python module venv is not installed.
+Fix this by installing this module. Depending on your Operating System:
+
+  # For Debian-based OS
+  sudo apt update
+  sudo apt-get install python3-venv
+
+  # For Redhat-based OS
+  sudo yum update
+  sudo yum install python3-venv
+
+EOF
+  exit 1
+fi
 
 if [ ! -z ${VIRTUAL_ENV+x} ]; then
   cat << EOF  >&2
